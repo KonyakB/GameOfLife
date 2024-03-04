@@ -1,0 +1,6 @@
+namespace GameOfLife;
+
+class Cell
+{
+
+}
