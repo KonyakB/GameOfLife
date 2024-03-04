@@ -116,7 +116,8 @@ Let's apply the rules of Conway's Game of Life:
             [false, true, true, true, false],
             [false, false, false, false, false],
         ]
-}```
+}
+```
 ### Submission
 
 - GitHub Link: Provide the project's GitHub link. Include MaxDKaos and vzastrow if the repository is private. Ensure the repository contains all necessary source code, unit tests, and documentation.
