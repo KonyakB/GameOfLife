@@ -1,11 +1,10 @@
-
 // -ICell Interface: Defines the properties and behaviors of a single cell in the grid (state, neighbors).
+using GameOfLife.Components;
 namespace GameOfLife.Interface;
 
 interface ICell
 {
     public Guid CellId { get; set; }
-
     bool _isAlive { get; set; }
     public string State { get; set; }
 
