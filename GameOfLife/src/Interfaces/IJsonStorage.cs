@@ -16,6 +16,12 @@ public interface IJsonStorage
     /// <returns>The JSON string representing the serialized object.</returns>
     public string SaveToJson<T>(T grid, string filePath);
 
-    /// *Summary:**
+
+    /// <summary>
+    /// Loads an object of type T from a JSON file.
+    /// </summary>
+    /// <typeparam name="T">The type of object to load.</typeparam>
+    /// <param name="filePath">The path of the JSON file to load from.</param>
+    /// <returns>An object of type T if the loading is successful; otherwise, null.</returns>
     public T? LoadFromJson<T>(string filePath );
 }
