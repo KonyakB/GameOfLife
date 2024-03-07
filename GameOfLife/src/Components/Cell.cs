@@ -9,6 +9,13 @@ namespace GameOfLife.Components;
 /// </summary>
 /// <param name="isAlive">when generating grid pass <see cref="Boolean"/> value deciding whether the
 /// cell <see cref="IsAlive"/> or not</param>
+/// <example>
+/// 
+/// <code>ICell MyCell= new Cell(true);
+/// MyCell.AddMultipleNeighbors([...]);
+/// Console.WriteLine(MyCell.NumOfAliveNeighbors);
+/// </code>
+/// </example>
 public class Cell(bool isAlive): ICell
 {
     public Guid Id { get; set; } = new Guid();
@@ -19,16 +26,6 @@ public class Cell(bool isAlive): ICell
         if (Neighbors.Contains(cell)) return false;
         
         Neighbors.Add(cell);
-        return true;
-    }
-
-    public bool RemoveNeighbor(Guid cellId)
-    {
-        var cell =  Neighbors.Find((cell) => cell.Id == cellId);
-        
-        if (cell == null) return false;
-        
-        Neighbors.Remove(cell);
         return true;
     }
 
@@ -46,17 +43,5 @@ public class Cell(bool isAlive): ICell
         
         //side note: you can use LINQ expression which makes it all a one-liner !!!
         // return cells.Select(AddNeighbor).All(status => status != false);
-    }
-
-    public bool RemoveMultipleNeighbors(Guid[] cellIds)
-    {
-        foreach (var cellId in cellIds)
-        {
-            var status = RemoveNeighbor(cellId);
-
-            if (status == false) return false;
-        }
-
-        return true;
     }
 }
