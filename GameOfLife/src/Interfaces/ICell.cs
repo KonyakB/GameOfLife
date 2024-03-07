@@ -9,10 +9,6 @@ namespace GameOfLife.Interfaces;
 ///</summary>
 public interface ICell
 {
-   /// <value>Property <c>Id</c> is cell's unique identification mostly used for removing it form the list of neighbors
-   /// <seealso cref="Guid"/>
-   /// </value>
-    public Guid Id { get; set; }
    /// <value>Property <c>IsAlive</c> is a boolean stating if cell is alive(<c>true</c>) or not(<c>false</c>)
    /// <seealso cref="Boolean"/>
    /// </value>
