@@ -33,15 +33,16 @@ public class Cell(bool isAlive): ICell
 
     public bool AddMultipleNeighbors(Cell[] cells)
     {
+        var wasSuccessful = true;
         foreach (var cell in cells)
         {
             var status = AddNeighbor(cell);
 
             //it could be if(!status) but I think that way is more readable
-            if (status == false) return false;
+            if (status == false) wasSuccessful = false;
         }
 
-        return true;
+        return wasSuccessful;
         
         //side note: you can use LINQ expression which makes it all a one-liner !!!
         // return cells.Select(AddNeighbor).All(status => status != false);
