@@ -22,14 +22,14 @@ interface ICell
     public List<Cell> Neighbors { get; set; }
     
     /// <summary>
-    /// How many neighbors there is in <see cref="Neighbors"/> List 
+    /// How many neighbors alive there is in <see cref="Neighbors"/> List 
     /// Subsequently how many <c>Neighbors</c> current <see cref="Cell"/> has
     /// <seealso cref="List{T}"/> <seealso cref="int"/>
     /// </summary>
     /// <returns>
     /// Integer with number of neighbors
     /// </returns>
-    public int NumOfNeighbors => Neighbors.Count;
+    public int NumOfAliveNeighbors => Neighbors.Count((cell) => cell.IsAlive); //not sure if it's a good practice
 
     /// <summary>
     /// Method for adding ONE neighbor(<see cref="Cell"/>) to the List of <see cref="Neighbors"/>
@@ -39,14 +39,6 @@ interface ICell
     /// <returns><c>true</c> if successful, <c>false</c> if fail</returns>
     public bool AddNeighbor(Cell cell);
     
-    /// <summary>
-    /// Method for removing ONE neighbor(<see cref="Cell"/>) from a <see cref="Neighbors"/> List by it's <c>Cell</c> <see cref="Id"/>
-    /// <seealso cref="List{T}"/> <seealso cref="Neighbors"/>
-    /// <seealso cref="Guid"/>
-    /// </summary>
-    /// <param name="cellId"><see cref="Guid"/> --> <see cref="Cell"/>'s <see cref="Id"/> to remove from <see cref="Neighbors"/> List of the current Cell </param>
-    /// <returns><c>true</c> if successful, <c>false</c> if fail</returns>
-    public bool RemoveNeighbor(Guid cellId);
 
     /// <summary>
     /// Method for adding multiple <see cref="Cell"/>'s to the <see cref="Neighbors"/> <c>List</c>
@@ -56,14 +48,4 @@ interface ICell
     /// <param name="cells"><see cref="Cell"/> array, to add to the <see cref="Neighbors"/> of the current Cell</param>
     /// <returns><c>true</c> if successful, <c>false</c> if fail</returns>
     public bool AddMultipleNeighbors(Cell[] cells);
-    /// <summary>
-    /// Method for removing multiple <see cref="Cell"/>'s from the <see cref="Neighbors"/> <c>List</c>
-    /// <seealso cref="List{T}"/> <seealso cref="Neighbors"/>
-    /// <seealso cref="Cell"/> <seealso cref="Array"/>
-    /// <seealso cref="Guid"/>
-    /// </summary>
-    /// <param name="cellIds"><see cref="Guid"/> array of <see cref="Id"/>'s of <see cref="Cell"/>'s
-    /// to remove from the <see cref="Neighbors"/> of the current Cell</param>
-    /// <returns><c>true</c> if successful, <c>false</c> if fail</returns>
-    public bool RemoveMultipleNeighbors(Guid[] cellIds);
 }
