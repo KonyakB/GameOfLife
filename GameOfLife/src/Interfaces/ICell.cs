@@ -7,7 +7,7 @@ namespace GameOfLife.Interfaces;
 ///<summary>
 /// Interface for Cell in Game of Life
 ///</summary>
-interface ICell
+public interface ICell
 {
    /// <value>Property <c>Id</c> is cell's unique identification mostly used for removing it form the list of neighbors
    /// <seealso cref="Guid"/>
