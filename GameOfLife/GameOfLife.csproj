@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Folder Include="src\Components\" />
       <Folder Include="src\Interfaces\" />
     </ItemGroup>
 
