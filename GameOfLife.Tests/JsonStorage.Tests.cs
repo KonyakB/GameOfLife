@@ -1,8 +1,9 @@
 // Purpose: Provide tests for the JsonStorage class.
 // TODO: Can't currently run the tests, the tests don't appear in the test explorer.
 using Xunit;
-using Moq;
+using Moq; // Install-Package Moq -Version 4.16.1
 using GameOfLife.Components;
+using GameOfLife.Interfaces;
 
 namespace GameOfLife.Tests
 {
@@ -51,18 +52,19 @@ namespace GameOfLife.Tests
             var expectedJson = "{}";
             var expectedGrid = new Cell[,] { };
             var jsonSerializerMock = new Mock<IJsonSerializer>();
-            jsonSerializerMock.Setup(js => js.Deserialize(expectedJson)).Returns(expectedGrid);
+            jsonSerializerMock.Setup(js => js.Deserialize<Cell>(expectedJson)).Equals(expectedGrid);
+            
             var fileStorageMock = new Mock<IFileStorage>();
             fileStorageMock.Setup(fs => fs.Read("TestPath")).Returns(expectedJson);
             var jsonStorage = new JsonStorage(jsonSerializerMock.Object, fileStorageMock.Object);
 
             // Act
-            var actualGrid = jsonStorage.LoadFromJson("TestPath");
+            var actualGrid = jsonStorage.LoadFromJson<Cell[,]>("TestPath");
 
             // Assert
             fileStorageMock.Verify(fs => fs.Read("TestPath"), Times.Once);
             Assert.Equal(expectedGrid, actualGrid);
-            jsonSerializerMock.Verify(js => js.Deserialize(expectedJson), Times.Once);
+            jsonSerializerMock.Verify(js => js.Deserialize<string>(expectedJson), Times.Once);
         }
     }
 }
