@@ -193,7 +193,7 @@ public class Utilities
         }
         
 
-        public static int SelectOption(string question, List<string> options)
+        public static int GetUserOption(string question, List<string> options)
         {
             int option = 0;
             int startingPosition = 0;
