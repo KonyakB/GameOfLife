@@ -152,49 +152,118 @@ public class Utilities
         }
 
 
-        public static int GetUserOption(string[] options, string text = "Choose an option:")
-        {
-            // WARNING: it's buggy when the text is multiple lines
-            // TODO: I have to fix it one day
-            
-            var selectedOption = 0;
+        public static string WrapLine(string paragraph = "", int tabSize = 8) {
+            string[] lines = paragraph
+                .Replace("\t", new String(' ', tabSize))
+                .Split(new string[] { Environment.NewLine, "\n"}, StringSplitOptions.None);
 
-            Console.WriteLine(text);
+            string result = "";
+            for (int i = 0; i < lines.Length; i++) {
+                string process = lines[i];
+                List<String> wrapped = new List<string>();
 
+                while (process.Length > Console.WindowWidth) {
+                    int wrapAt = process.LastIndexOf(' ', Math.Min(Console.WindowWidth - 1, process.Length));
+                    if (wrapAt <= 0) break;
 
-            for (var i = 0; i < options.Length; ++i)
-                Console.WriteLine(
-                    $"{(i == selectedOption ? "\U000027A4 " : " ")} {options[i]}"
-                );
-
-            MoveCursorUp(options.Length);
-
-            while (true)
-            {
-                var key = Console.ReadKey().Key;
-
-                switch (key)
-                {
-                    case ConsoleKey.UpArrow when selectedOption > 0:
-                        Console.Write($"\r {options[selectedOption]}".PadRight(10));
-                        MoveCursorUp();
-                        selectedOption = Math.Max(0, selectedOption - 1);
-                        Console.Write($"\r\U000027A4 {options[selectedOption]}".PadRight(10));
-
-                        break;
-
-                    case ConsoleKey.DownArrow when selectedOption < options.Length - 1:
-                        Console.Write($"\r {options[selectedOption]}".PadRight(10));
-                        MoveCursorDown();
-                        selectedOption = Math.Min(options.Length - 1, selectedOption + 1);
-                        Console.Write($"\r\U000027A4 {options[selectedOption]}".PadRight(10));
-
-                        break;
-                    case ConsoleKey.Enter:
-                        Console.Clear();
-                        // Console.Write($"You chose: {options[selectedOption]}".PadRight(11));
-                        return selectedOption;
+                    wrapped.Add(process.Substring(0, wrapAt));
+                    process = process.Remove(0, wrapAt + 1);
                 }
+
+                foreach (string wrap in wrapped) {
+                    result += wrap + "\n";
+                }
+                result += process + (i < lines.Length-1 ? "\n" : "");
+            }
+            return result;
+        }
+
+
+        public static void WriteCentered(string paragraph, ConsoleColor color = ConsoleColor.White)
+        {
+            Console.ForegroundColor = color;
+            string[] lines = paragraph.Split(new string[] { Environment.NewLine, "\n" }, StringSplitOptions.None);
+            foreach(string text in lines) {
+                if((Console.WindowWidth-text.Length)/2 >= 0) {
+                    Console.SetCursorPosition((Console.WindowWidth - text.Length) / 2, Console.CursorTop);
+                }
+                Console.WriteLine(text);
+            }
+            Console.ResetColor();
+        }
+        
+
+        public static int SelectOption(string question, List<string> options)
+        {
+            int option = 0;
+            int startingPosition = 0;
+            int endingPosition = options.Count;
+
+            bool selected = false;
+            Console.CursorVisible = false;
+
+            if (question != null && options.Count > 0)
+            {
+                Console.Clear();
+                WriteCentered(WrapLine(question + "\n"));
+
+                int top = Console.CursorTop;
+                for (int i = 0; i < options.Count; i++)
+                {
+                    if (option == i)
+                    {
+                        WriteCentered(WrapLine(options[i]), ConsoleColor.Green);
+                    }
+                    else
+                    {
+                        WriteCentered(WrapLine(options[i]));
+                    }
+                }
+                Console.CursorTop = top;
+
+                while (!selected)
+                {
+                    ConsoleKeyInfo key = Console.ReadKey(true);
+
+                    switch (key.Key)
+                    {
+                        default:
+                            break;
+                        case ConsoleKey.DownArrow:
+                            if (option + 1 < endingPosition)
+                            {
+                                WriteCentered(WrapLine(options[option]));
+                                option++;
+                                string selectedText = WrapLine(options[option]);
+                                WriteCentered(selectedText, ConsoleColor.Green);
+                                Console.CursorTop -= selectedText.Count(x => x == '\n')+1;
+                            }
+                            break;
+                        case ConsoleKey.UpArrow:
+                            if (option - 1 >= startingPosition)
+                            {
+                                string deselected = WrapLine(options[option]);
+                                WriteCentered(deselected);
+                                option--;
+                                string selectedText = WrapLine(options[option]);
+                                Console.CursorTop -= selectedText.Count(x => x == '\n') + deselected.Count(x => x == '\n') + 2;
+                                WriteCentered(selectedText, ConsoleColor.Green);
+                                Console.CursorTop -= selectedText.Count(x => x == '\n') + 1;
+                            }
+                            break;
+                        case ConsoleKey.Enter:
+                            selected = true;
+                            break;
+                    }
+                }
+                Console.CursorVisible = true;
+                Console.Clear();
+                return option;
+            }
+            else
+            {
+                WriteCentered("Wrong selection menu inputs", ConsoleColor.Red);
+                return -1;
             }
         }
 
