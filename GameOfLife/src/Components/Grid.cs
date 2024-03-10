@@ -1,4 +1,3 @@
-using System.Text.Json;
 using GameOfLife.Interfaces;
 
 namespace GameOfLife.Components;
@@ -9,33 +8,33 @@ public class Grid : IGrid
     private int columns { get; set; }
     private Cell[,] grid { get; set; }
     
-    public Grid(bool[][] boollist, int rows, int columns)
+    public Grid(int rows, int columns, bool[][] boolarray)
     {
         this.rows = rows;
         this.columns = columns;
-        Cell[,] _grid = new Cell[rows, columns];
+        Cell[,] gridDetached = new Cell[rows, columns]; // grid w/o conections to neighbors
         
         for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < columns; j++)
             {
-                switch (boollist[i][j])
+                switch (boolarray[i][j])
                 {
                     case false:
-                        _grid[i, j].IsAlive = false;
+                        gridDetached[i, j].IsAlive = false;
                         break;
                     case true:
-                        _grid[i, j].IsAlive = true;
+                        gridDetached[i, j].IsAlive = true;
                         break;
                 } 
             }
         }
         
-        Neighbors(_grid);
-        _grid = grid;
+        Neighbors(gridDetached); //adding their neighbors to each cell
+        grid = gridDetached;
     }
 
-    public void Neighbors(Cell[,] grid)
+    public void Neighbors(Cell[,] grid) //connects every cell to their neighbors
     {
         for (int i = 0; i < rows; i++)
         {
@@ -47,6 +46,8 @@ public class Grid : IGrid
                 int jLeft = (j > 0) ? j - 1 : columns - 1;
                 int jRight = (j < columns - 1) ? j + 1 : 0;
 
+                //adding the 8 neighbors
+                
                 Cell[] neighbors =
                 {
                     grid[jLeft,iTop],
