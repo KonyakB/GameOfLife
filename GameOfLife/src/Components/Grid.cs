@@ -8,7 +8,7 @@ public class Grid : IGrid
     private int columns { get; set; }
     private Cell[,] grid { get; set; }
     
-    public Grid(int rows, int columns, bool[][] boolArray)
+    public Grid(int rows, int columns, bool[,] boolArray)
     {
         if ((boolArray.GetLength(0) != rows)||(boolArray.GetLength(1) != columns))
         {
@@ -17,29 +17,30 @@ public class Grid : IGrid
 
         if (rows == 0 || columns == 0)
         {
-            throw new Exception("Row or Column number is 0");
+            throw new ArgumentException("Row or Column number is 0");
         }
 
         if (boolArray == null)
         {
-            throw new Exception("Empty array");
+            throw new ArgumentNullException("boolArray");
         }
         
         this.rows = rows;
         this.columns = columns;
         Cell[,] gridDetached = new Cell[rows, columns]; // grid w/o conections to neighbors
         
+        
         for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < columns; j++)
             {
-                switch (boolArray[i][j])
+                switch (boolArray[i,j])
                 {
                     case false:
-                        gridDetached[i, j].IsAlive = false;
+                        gridDetached[i, j] = new Cell(false);
                         break;
                     case true:
-                        gridDetached[i, j].IsAlive = true;
+                        gridDetached[i, j] = new Cell(true);
                         break;
                 } 
             }
@@ -51,6 +52,8 @@ public class Grid : IGrid
 
     public void Neighbors(Cell[,] grid) //connects every cell to their neighbors
     {
+        rows = grid.GetLength(0);
+        columns = grid.GetLength(1);
         for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < columns; j++)
@@ -63,16 +66,16 @@ public class Grid : IGrid
 
                 //adding the 8 neighbors
                 
-                Cell[] neighbors =
+                Cell[] neighbors = 
                 {
-                    grid[jLeft,iTop],
-                    grid[j,iTop],
-                    grid[jRight,iTop],
-                    grid[jLeft,i],
-                    grid[jRight,i],
-                    grid[jLeft,iBottom],
-                    grid[j,iBottom],
-                    grid[jRight,iBottom]
+                    grid[iTop,jLeft], 
+                    grid[iTop,j], 
+                    grid[iTop,jRight],
+                    grid[i,jLeft], 
+                    grid[i,jRight], 
+                    grid[iBottom,jLeft], 
+                    grid[iBottom,j], 
+                    grid[iBottom,jRight]
                 };
 
                 grid[i, j].AddMultipleNeighbors(neighbors);
