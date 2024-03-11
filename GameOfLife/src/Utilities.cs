@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GameOfLife;
 
-public class Utilities
+public static class Utilities
 {
     /*
      <summary>
@@ -11,7 +11,7 @@ public class Utilities
         IsNumeric
      <summary>
     */
-       public static class UTypes
+    public static class UTypes
     {
         public static T CastObject<T>(object input)
         {
@@ -36,21 +36,22 @@ public class Utilities
             return NumericTypes.Contains(Nullable.GetUnderlyingType(myType) ?? myType);
         }
     }
- /*
-  <summary>
-  UConsole Methods
-        GetUserInput
-        GetUserInputAndConvert
-        GetUserInputAsNumericType
-        Clear
-        GetUserOption
-        GetEnterConfirmation
-        MoveCursorUp
-        MoveCursorDown
-        MoveCursorLeft
-        MoveCursorRight
-  <summary>      
-  */
+
+    /*
+     <summary>
+     UConsole Methods
+           GetUserInput
+           GetUserInputAndConvert
+           GetUserInputAsNumericType
+           Clear
+           GetUserOption
+           GetEnterConfirmation
+           MoveCursorUp
+           MoveCursorDown
+           MoveCursorLeft
+           MoveCursorRight
+     <summary>
+     */
     public static class UConsole
     {
         private const string DefaultPromptMessage = "Input ";
@@ -88,7 +89,7 @@ public class Utilities
             {
                 input = GetUserInput(prompt);
             } while (!decimal.TryParse(input, out userNumber));
-            
+
             return UTypes.ConvertObject<T>(userNumber);
         }
 
@@ -152,29 +153,31 @@ public class Utilities
         }
 
 
-        public static string WrapLine(string paragraph = "", int tabSize = 8) {
-            string[] lines = paragraph
-                .Replace("\t", new String(' ', tabSize))
-                .Split(new string[] { Environment.NewLine, "\n"}, StringSplitOptions.None);
+        public static string WrapLine(string paragraph = "", int tabSize = 8)
+        {
+            var lines = paragraph
+                .Replace("\t", new string(' ', tabSize))
+                .Split(new string[] { Environment.NewLine, "\n" }, StringSplitOptions.None);
 
-            string result = "";
-            for (int i = 0; i < lines.Length; i++) {
-                string process = lines[i];
-                List<String> wrapped = new List<string>();
+            var result = "";
+            for (var i = 0; i < lines.Length; i++)
+            {
+                var process = lines[i];
+                var wrapped = new List<string>();
 
-                while (process.Length > Console.WindowWidth) {
-                    int wrapAt = process.LastIndexOf(' ', Math.Min(Console.WindowWidth - 1, process.Length));
+                while (process.Length > Console.WindowWidth)
+                {
+                    var wrapAt = process.LastIndexOf(' ', Math.Min(Console.WindowWidth - 1, process.Length));
                     if (wrapAt <= 0) break;
 
                     wrapped.Add(process.Substring(0, wrapAt));
                     process = process.Remove(0, wrapAt + 1);
                 }
 
-                foreach (string wrap in wrapped) {
-                    result += wrap + "\n";
-                }
-                result += process + (i < lines.Length-1 ? "\n" : "");
+                foreach (var wrap in wrapped) result += wrap + "\n";
+                result += process + (i < lines.Length - 1 ? "\n" : "");
             }
+
             return result;
         }
 
@@ -182,24 +185,25 @@ public class Utilities
         public static void WriteCentered(string paragraph, ConsoleColor color = ConsoleColor.White)
         {
             Console.ForegroundColor = color;
-            string[] lines = paragraph.Split(new string[] { Environment.NewLine, "\n" }, StringSplitOptions.None);
-            foreach(string text in lines) {
-                if((Console.WindowWidth-text.Length)/2 >= 0) {
+            var lines = paragraph.Split(new string[] { Environment.NewLine, "\n" }, StringSplitOptions.None);
+            foreach (var text in lines)
+            {
+                if ((Console.WindowWidth - text.Length) / 2 >= 0)
                     Console.SetCursorPosition((Console.WindowWidth - text.Length) / 2, Console.CursorTop);
-                }
                 Console.WriteLine(text);
             }
+
             Console.ResetColor();
         }
-        
 
-        public static int GetUserOption(string question, List<string> options)
+
+        public static int GetUserOption(string? question, List<string> options)
         {
-            int option = 0;
-            int startingPosition = 0;
-            int endingPosition = options.Count;
+            var option = 0;
+            var startingPosition = 0;
+            var endingPosition = options.Count;
 
-            bool selected = false;
+            var selected = false;
             Console.CursorVisible = false;
 
             if (question != null && options.Count > 0)
@@ -207,23 +211,17 @@ public class Utilities
                 Console.Clear();
                 WriteCentered(WrapLine(question + "\n"));
 
-                int top = Console.CursorTop;
-                for (int i = 0; i < options.Count; i++)
-                {
+                var top = Console.CursorTop;
+                for (var i = 0; i < options.Count; i++)
                     if (option == i)
-                    {
                         WriteCentered(WrapLine(options[i]), ConsoleColor.Green);
-                    }
                     else
-                    {
                         WriteCentered(WrapLine(options[i]));
-                    }
-                }
                 Console.CursorTop = top;
 
                 while (!selected)
                 {
-                    ConsoleKeyInfo key = Console.ReadKey(true);
+                    var key = Console.ReadKey(true);
 
                     switch (key.Key)
                     {
@@ -234,28 +232,32 @@ public class Utilities
                             {
                                 WriteCentered(WrapLine(options[option]));
                                 option++;
-                                string selectedText = WrapLine(options[option]);
+                                var selectedText = WrapLine(options[option]);
                                 WriteCentered(selectedText, ConsoleColor.Green);
-                                Console.CursorTop -= selectedText.Count(x => x == '\n')+1;
+                                Console.CursorTop -= selectedText.Count(x => x == '\n') + 1;
                             }
+
                             break;
                         case ConsoleKey.UpArrow:
                             if (option - 1 >= startingPosition)
                             {
-                                string deselected = WrapLine(options[option]);
+                                var deselected = WrapLine(options[option]);
                                 WriteCentered(deselected);
                                 option--;
-                                string selectedText = WrapLine(options[option]);
-                                Console.CursorTop -= selectedText.Count(x => x == '\n') + deselected.Count(x => x == '\n') + 2;
+                                var selectedText = WrapLine(options[option]);
+                                Console.CursorTop -= selectedText.Count(x => x == '\n') +
+                                                     deselected.Count(x => x == '\n') + 2;
                                 WriteCentered(selectedText, ConsoleColor.Green);
                                 Console.CursorTop -= selectedText.Count(x => x == '\n') + 1;
                             }
+
                             break;
                         case ConsoleKey.Enter:
                             selected = true;
                             break;
                     }
                 }
+
                 Console.CursorVisible = true;
                 Console.Clear();
                 return option;
@@ -265,6 +267,16 @@ public class Utilities
                 WriteCentered("Wrong selection menu inputs", ConsoleColor.Red);
                 return -1;
             }
+        }
+
+        public static bool GetUserBoolOption(string? question, List<string>? options)
+        {
+            if (options == null) options = new List<string>() { "Yes", "No" };
+
+            var userOption = GetUserOption(question, options);
+
+            // if userOption is 0 (yes) then return true, else false
+            return userOption == 0;
         }
 
         public static void GetEnterConfirmation()
@@ -277,6 +289,27 @@ public class Utilities
                 if (key == ConsoleKey.Enter) return;
             }
         }
+
+        private const string WasKeyPressedPromptMultiple = "Press one of these buttons to break: ";
+        private const string WasKeyPressedPromptSingle = "Press this button to break: ";
+
+        public static bool WasKeyPressed(ConsoleKey[] breakKeys, string prompt = WasKeyPressedPromptMultiple)
+        {
+            ArgumentNullException.ThrowIfNull(breakKeys);
+
+            Console.Write(prompt);
+            foreach (var key in breakKeys) Console.Write(key + (key == breakKeys.Last() ? "" : " / "));
+            Console.Write("\n");
+
+            return Console.KeyAvailable && breakKeys.Contains(Console.ReadKey(true).Key);
+        }
+
+        public static bool WasKeyPressed(ConsoleKey breakKey, string prompt = WasKeyPressedPromptSingle)
+        {
+            ArgumentNullException.ThrowIfNull(breakKey);
+            Console.WriteLine(prompt + breakKey);
+
+            return Console.KeyAvailable && breakKey == Console.ReadKey(true).Key;
+        }
     }
- 
 }
