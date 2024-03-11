@@ -8,8 +8,23 @@ public class Grid : IGrid
     private int columns { get; set; }
     private Cell[,] grid { get; set; }
     
-    public Grid(int rows, int columns, bool[][] boolarray)
+    public Grid(int rows, int columns, bool[][] boolArray)
     {
+        if ((boolArray.GetLength(0) != rows)||(boolArray.GetLength(1) != columns))
+        {
+            throw new ArgumentException("Provided row and column number does not match the provided matrix.");
+        }
+
+        if (rows == 0 || columns == 0)
+        {
+            throw new Exception("Row or Column number is 0");
+        }
+
+        if (boolArray == null)
+        {
+            throw new Exception("Empty array");
+        }
+        
         this.rows = rows;
         this.columns = columns;
         Cell[,] gridDetached = new Cell[rows, columns]; // grid w/o conections to neighbors
@@ -18,7 +33,7 @@ public class Grid : IGrid
         {
             for (int j = 0; j < columns; j++)
             {
-                switch (boolarray[i][j])
+                switch (boolArray[i][j])
                 {
                     case false:
                         gridDetached[i, j].IsAlive = false;
@@ -69,7 +84,7 @@ public class Grid : IGrid
     {
         switch (cell.NumOfAliveNeighbors)
         { 
-            case var expression when (cell.NumOfAliveNeighbors < 2) || (cell.NumOfAliveNeighbors > 3): 
+            case < 2 or > 3: 
                 cell.IsAlive = false; 
                 break;
             
