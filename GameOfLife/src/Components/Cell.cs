@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using GameOfLife.Interfaces;
 
 namespace GameOfLife.Components;
@@ -19,7 +20,10 @@ namespace GameOfLife.Components;
 public class Cell(bool isAlive) : ICell
 {
     public bool IsAlive { get; set; } = isAlive;
+    
+    [JsonIgnore]
     public List<Cell> Neighbors { get; set; } = new();
+    [JsonIgnore]
     public int NumOfAliveNeighbors => Neighbors.Count((cell) => cell.IsAlive);
 
     public bool AddNeighbor(Cell cell)

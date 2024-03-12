@@ -10,14 +10,14 @@ public interface IFileStorage
     /// </summary>
     /// <param name="path">The path of the file to write to.</param>
     /// <param name="content">The content to write to the file.</param>
-    void Write(string path, string content);
+    void Write(string path, string? content);
 
     /// <summary>
     /// Reads the content of a file at the given path.
     /// </summary>
     /// <param name="path">The path of the file to read.</param>
     /// <returns>The content of the file.</returns>
-    string Read(string path);
+    string? Read(string path);
 }
 
 /// <summary>
@@ -32,7 +32,7 @@ public class FileStorage : IFileStorage
     /// </summary>
     /// <param name="path">The path of the file to write.</param>
     /// <param name="content">The content to write to the file.</param>
-    public void Write(string path, string content)
+    public void Write(string path, string? content)
     {
         File.WriteAllText(path, content);
     }
@@ -42,7 +42,7 @@ public class FileStorage : IFileStorage
     /// </summary>
     /// <param name="path">The path of the file to be read.</param>
     /// <returns>The content of the file as a string.</returns>
-    public string Read(string path)
+    public string? Read(string path)
     {
         return File.ReadAllText(path);
     }

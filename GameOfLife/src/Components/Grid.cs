@@ -6,7 +6,7 @@ public class Grid : IGrid
 {
     private int rows { get; set; }
     private int columns { get; set; }
-    public Cell[,] DataGrid { get; set; }
+    public Cell[,]? DataGrid { get; set; }
 
     public Grid(int rows, int columns, bool[,] boolArray)
     {
@@ -38,7 +38,7 @@ public class Grid : IGrid
         DataGrid = gridDetached;
     }
 
-    public void Neighbors(Cell[,] grid) //connects every cell to their neighbors
+    public void Neighbors(Cell[,]? grid) //connects every cell to their neighbors
     {
         rows = grid.GetLength(0);
         columns = grid.GetLength(1);

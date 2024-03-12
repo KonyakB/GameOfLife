@@ -18,7 +18,7 @@ namespace GameOfLife.Tests
             /// <summary>
             /// Represents a JSON serialized object.
             /// </summary>
-            public string SerializedObj { get; set; }
+            public string? SerializedObj { get; set; }
 
             /// <summary>
             /// Deserialize the specified JSON string into an object of type T.
@@ -26,7 +26,7 @@ namespace GameOfLife.Tests
             /// <typeparam name="T">The type of object to deserialize.</typeparam>
             /// <param name="json">The JSON string to deserialize.</param>
             /// <returns>An object of type T if deserialization is successful; otherwise, null.</returns>
-            public T Deserialize<T>(string json)
+            public T Deserialize<T>(string? json)
             {
                 return (T)(object)SerializedObj;
             }
@@ -37,7 +37,7 @@ namespace GameOfLife.Tests
             /// <typeparam name="T">The type of the object to be serialized.</typeparam>
             /// <param name="obj">The object to be serialized.</param>
             /// <returns>A JSON string representing the serialized object.</returns>
-            public string Serialize<T>(T obj)
+            public string? Serialize<T>(T obj)
             {
                 bool[,] grid = obj as bool[,];
                 SerializedObj = SerializeGrid(grid);
@@ -49,9 +49,9 @@ namespace GameOfLife.Tests
             /// </summary>
             /// <param name="grid">The boolean grid to be serialized.</param>
             /// <returns>The JSON string representing the serialized grid.</returns>
-            private string SerializeGrid(bool[,] grid)
+            private string? SerializeGrid(bool[,] grid)
             {
-                string serialized = $"{{ \"rows\": {grid.GetLength(0)}, \"columns\": {grid.GetLength(1)}, \"grid\": [ ";
+                string? serialized = $"{{ \"rows\": {grid.GetLength(0)}, \"columns\": {grid.GetLength(1)}, \"grid\": [ ";
                 
                 for (int i = 0; i < grid.GetLength(0); i++)
                 {
@@ -81,14 +81,14 @@ namespace GameOfLife.Tests
             /// <summary>
             /// Represents a component that provides functionality to save and load objects to/from JSON format.
             /// </summary>
-            public string WrittenContent { get; private set; }
+            public string? WrittenContent { get; private set; }
 
             /// <summary>
             /// Reads the content of a file at the given path.
             /// </summary>
             /// <param name="filePath">The path of the file to read.</param>
             /// <returns>The content of the file.</returns>
-            public string Read(string filePath)
+            public string? Read(string filePath)
             {
                 return WrittenContent;
             }
@@ -97,7 +97,7 @@ namespace GameOfLife.Tests
             /// Represents a component that provides functionality to save and load objects to/from JSON format.
             /// </summary>
             /// <typeparam name="T">The type of the object to save/load.</typeparam>
-            public void Write(string filePath, string content)
+            public void Write(string filePath, string? content)
             {
                 WrittenContent = content;
             }

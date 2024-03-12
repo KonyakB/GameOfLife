@@ -28,9 +28,18 @@ public class TheGameOfLife
     {
         Console.WriteLine("Welcome to the game of life!");
 
-        // var jsonGrid = JsonStorage.LoadFromJson<Grid>(PathToJsonFile);
         //TODO: to fix - I'm too tired to figure out how Mark imagined saving stuff into json 
         Grid? jsonGrid = null;
+
+        try
+        {
+            jsonGrid = JsonStorage.LoadFromJson(PathToJsonFile);
+        }
+        catch (FileNotFoundException)
+        {
+            using var stream = File.Create(PathToJsonFile);
+            Console.WriteLine($"Created new file: {PathToJsonFile}");
+        }
 
         bool useJsonGrid = false;
         if (jsonGrid != null)
@@ -64,8 +73,8 @@ public class TheGameOfLife
                     _automationSimulator.RunSimulationContinuously();
                     break;
                 case 2:
-                    //TODO: to fix - I'm too tired to figure out how Mark imagined saving stuff into json 
-                    // JsonStorage.SaveToJson(_automationSimulator.GameOfLifeGrid, PathToJsonFile);
+                    //TODO: to fix - I'm too tired to figure out how Mark imagined saving stuff into json
+                    JsonStorage.SaveToJson(_automationSimulator.GameOfLifeGrid, PathToJsonFile);
                     return;
                 default:
                     break;
