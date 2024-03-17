@@ -28,7 +28,6 @@ public class TheGameOfLife
     {
         Console.WriteLine("Welcome to the game of life!");
 
-        //TODO: to fix - I'm too tired to figure out how Mark imagined saving stuff into json 
         Grid? jsonGrid = null;
 
         try
@@ -41,23 +40,18 @@ public class TheGameOfLife
             Console.WriteLine($"Created new file: {PathToJsonFile}");
         }
 
-        bool useJsonGrid = false;
-        if (jsonGrid != null)
+        bool useJsonGrid = jsonGrid != null && Utilities.UConsole.GetUserBoolOption(
+            "Do you want to use loaded grid?", null
+        );
+
+        if (useJsonGrid)
         {
-            Console.WriteLine($"Successfully loaded grid form JSON file\n");
-
-            useJsonGrid = Utilities.UConsole.GetUserBoolOption(
-                "Do you want to use loaded grid?", null
-            );
-
-            if (useJsonGrid)
-                _automationSimulator.GameOfLifeGrid = jsonGrid;
+            _automationSimulator.GameOfLifeGrid = jsonGrid;
         }
-        else if(!useJsonGrid)
+        else
         {
             GetUserInputRowsAndColumns();
         }
-
 
         while (true)
         {
@@ -73,7 +67,6 @@ public class TheGameOfLife
                     _automationSimulator.RunSimulationContinuously();
                     break;
                 case 2:
-                    //TODO: to fix - I'm too tired to figure out how Mark imagined saving stuff into json
                     JsonStorage.SaveToJson(_automationSimulator.GameOfLifeGrid, PathToJsonFile);
                     return;
                 default:
