@@ -28,27 +28,30 @@ public class TheGameOfLife
     {
         Console.WriteLine("Welcome to the game of life!");
 
-        // var jsonGrid = JsonStorage.LoadFromJson<Grid>(PathToJsonFile);
-        //TODO: to fix - I'm too tired to figure out how Mark imagined saving stuff into json 
         Grid? jsonGrid = null;
 
-        bool useJsonGrid = false;
-        if (jsonGrid != null)
+        try
         {
-            Console.WriteLine($"Successfully loaded grid form JSON file\n");
-
-            useJsonGrid = Utilities.UConsole.GetUserBoolOption(
-                "Do you want to use loaded grid?", null
-            );
-
-            if (useJsonGrid)
-                _automationSimulator.GameOfLifeGrid = jsonGrid;
+            jsonGrid = JsonStorage.LoadFromJson(PathToJsonFile);
         }
-        else if(!useJsonGrid)
+        catch (FileNotFoundException)
+        {
+            using var stream = File.Create(PathToJsonFile);
+            Console.WriteLine($"Created new file: {PathToJsonFile}");
+        }
+
+        bool useJsonGrid = jsonGrid != null && Utilities.UConsole.GetUserBoolOption(
+            "Do you want to use loaded grid?", null
+        );
+
+        if (useJsonGrid)
+        {
+            _automationSimulator.GameOfLifeGrid = jsonGrid;
+        }
+        else
         {
             GetUserInputRowsAndColumns();
         }
-
 
         while (true)
         {
@@ -64,8 +67,7 @@ public class TheGameOfLife
                     _automationSimulator.RunSimulationContinuously();
                     break;
                 case 2:
-                    //TODO: to fix - I'm too tired to figure out how Mark imagined saving stuff into json 
-                    // JsonStorage.SaveToJson(_automationSimulator.GameOfLifeGrid, PathToJsonFile);
+                    JsonStorage.SaveToJson(_automationSimulator.GameOfLifeGrid, PathToJsonFile);
                     return;
                 default:
                     break;
