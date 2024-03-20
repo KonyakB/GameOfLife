@@ -1,8 +1,8 @@
 # Group Project: Conway's Game of Life Simulator
 
-## Preamble: In 1970, mathematician John Horton Conway introduced the Game of Life, a deceptively simple cellular automaton governed by just a few rules of life, death, and birth for cells on a grid. Initially a playful mathematical exploration, the Game of Life rapidly captured imaginations with its mesmerizing patterns and unexpected depth.
+- Preamble: In 1970, mathematician John Horton Conway introduced the Game of Life, a deceptively simple cellular automaton governed by just a few rules of life, death, and birth for cells on a grid. Initially a playful mathematical exploration, the Game of Life rapidly captured imaginations with its mesmerizing patterns and unexpected depth.
 
-At its core, Conway's Game of Life is a deceptively simple experiment in emergence and computability. From a handful of rules governing the life and death of cells on a grid, unpredictable complexity blossoms. Patterns evolve, exhibiting behaviors reminiscent of living organisms: self-replication, organized movement, and even rudimentary computation.
+- At its core, Conway's Game of Life is a deceptively simple experiment in emergence and computability. From a handful of rules governing the life and death of cells on a grid, unpredictable complexity blossoms. Patterns evolve, exhibiting behaviors reminiscent of living organisms: self-replication, organized movement, and even rudimentary computation.
 
 ### Historical Impact: Beyond its theoretical significance, the Game of Life found practical applications over the years:
 
@@ -87,32 +87,37 @@ Exception Handling and Input Validation:
 
 ### Initial Grid (Generation 0)
 
- > ..O..
- > ...O.
- > .OOO.
- > .....
+```
+..O..
+...O.
+.OOO.
+.....
+```
 - 'O' represents a live cell.
 - '.' represents a dead cell.
 Next Generation (Generation 1)
 
 Let's apply the rules of Conway's Game of Life:
 
+```
 .....
 .O.O.
 ..OO.
 ..O..
+```
 ### JSON File for the Example Grid (Generation 0):
 
-`{
+```{
 "rows": 4,  
 "columns": 5,  
 "grid": [
-[false, false, true, false, false],
-[false, false, false, true, false],
-[false, true, true, true, false],
-[false, false, false, false, false],
-]
-}`
+            [false, false, true, false, false],
+            [false, false, false, true, false],
+            [false, true, true, true, false],
+            [false, false, false, false, false],
+        ]
+}
+```
 ### Submission
 
 - GitHub Link: Provide the project's GitHub link. Include MaxDKaos and vzastrow if the repository is private. Ensure the repository contains all necessary source code, unit tests, and documentation.
